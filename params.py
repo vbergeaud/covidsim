@@ -17,7 +17,7 @@ class Params():
         self.params['s']=7.5
         self.params['inv_mu']=self.params['s']-self.params['inv_theta']
         self.params['r_beta']=0.51
-        self.params['contagion_rate']=3.2/(self.params['s']-self.params['inv_epsilon'])/9
+        self.params['contagion_rate']=3./(self.params['s']-self.params['inv_epsilon'])/10.5
        
         if age_group==Age.CHILD:
             self.params['p_ps']=1

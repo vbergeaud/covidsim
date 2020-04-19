@@ -24,46 +24,40 @@ class ContagionMatrix():
     
     @staticmethod
     def make_contagion(contagion):
+        from population_params import PopulationParams
+        params=PopulationParams()
+        ac_=params['alpha_child']
+        aa_=params['alpha_adult']
+        as_=params['alpha_senior']
+        
         matrix=ContagionMatrix()
         if contagion==Contagion.BASELINE:
             matrix._matrix[Age.CHILD][Age.CHILD]=8
             matrix._matrix[Age.CHILD][Age.ADULT]=5
             matrix._matrix[Age.CHILD][Age.SENIOR]=1
-            matrix._matrix[Age.ADULT][Age.CHILD]=3
             matrix._matrix[Age.ADULT][Age.ADULT]=6.5
-            matrix._matrix[Age.ADULT][Age.SENIOR]=3
-            matrix._matrix[Age.SENIOR][Age.CHILD]=1
-            matrix._matrix[Age.SENIOR][Age.ADULT]=6
+            matrix._matrix[Age.ADULT][Age.SENIOR]=2.25
             matrix._matrix[Age.SENIOR][Age.SENIOR]=4
         elif contagion==Contagion.LOCKDOWN:
             matrix._matrix[Age.CHILD][Age.CHILD]=2
             matrix._matrix[Age.CHILD][Age.ADULT]=2
             matrix._matrix[Age.CHILD][Age.SENIOR]=0
-            matrix._matrix[Age.ADULT][Age.CHILD]=1
             matrix._matrix[Age.ADULT][Age.ADULT]=1.5
-            matrix._matrix[Age.ADULT][Age.SENIOR]=1
-            matrix._matrix[Age.SENIOR][Age.CHILD]=0
-            matrix._matrix[Age.SENIOR][Age.ADULT]=1
+            matrix._matrix[Age.ADULT][Age.SENIOR]=0.35
             matrix._matrix[Age.SENIOR][Age.SENIOR]=1
-        elif contagion==Contagion.SEMI_LOCKDOWN:
+        elif contagion==Contagion.SEMI_LOCKDOWN or contagion==Contagion.SEMI_LOCKDOWN_OPEN_SCHOOLS:
             matrix._matrix[Age.CHILD][Age.CHILD]=2
             matrix._matrix[Age.CHILD][Age.ADULT]=2
-            matrix._matrix[Age.CHILD][Age.SENIOR]=0.5
-            matrix._matrix[Age.ADULT][Age.CHILD]=1.5
-            matrix._matrix[Age.ADULT][Age.ADULT]=2
-            matrix._matrix[Age.ADULT][Age.SENIOR]=1.5
-            matrix._matrix[Age.SENIOR][Age.CHILD]=0.5
-            matrix._matrix[Age.SENIOR][Age.ADULT]=1.25
-            matrix._matrix[Age.SENIOR][Age.SENIOR]=1.25
-        elif contagion==Contagion.SEMI_LOCKDOWN_OPEN_SCHOOLS:
+            matrix._matrix[Age.CHILD][Age.SENIOR]=0
+            matrix._matrix[Age.ADULT][Age.ADULT]=3
+            matrix._matrix[Age.ADULT][Age.SENIOR]=0.35
+            matrix._matrix[Age.SENIOR][Age.SENIOR]=1.5
+        if contagion==Contagion.SEMI_LOCKDOWN_OPEN_SCHOOLS:
             matrix._matrix[Age.CHILD][Age.CHILD]=8
-            matrix._matrix[Age.CHILD][Age.ADULT]=4
-            matrix._matrix[Age.CHILD][Age.SENIOR]=0.5
-            matrix._matrix[Age.ADULT][Age.CHILD]=2
-            matrix._matrix[Age.ADULT][Age.ADULT]=2
-            matrix._matrix[Age.ADULT][Age.SENIOR]=1.5
-            matrix._matrix[Age.SENIOR][Age.CHILD]=0.5
-            matrix._matrix[Age.SENIOR][Age.ADULT]=1.25
-            matrix._matrix[Age.SENIOR][Age.SENIOR]=1.25
-  
+            matrix._matrix[Age.CHILD][Age.ADULT]=5
+        matrix._matrix[Age.ADULT][Age.CHILD]=ac_/aa_*matrix._matrix[Age.CHILD][Age.ADULT]
+        matrix._matrix[Age.SENIOR][Age.CHILD]=ac_/as_*matrix._matrix[Age.CHILD][Age.SENIOR]
+        matrix._matrix[Age.SENIOR][Age.ADULT]=aa_/as_*matrix._matrix[Age.ADULT][Age.SENIOR]
+
+
         return matrix

@@ -24,13 +24,12 @@ class Result():
         self._result=np.append(self._result,result,axis=0)
     
     def draw_dates(self,dates):
-        print (dates)
         import matplotlib.pyplot as plt      
         for date in dates:
             plt.axvline(x=date)
             
     def show_result(self,dates):
-        offset=dates[0]-17
+        offset=dates[0]-26
         res=np.reshape(self._result,(-1,len(Age),len(State)))
         import matplotlib.pyplot as plt      
         plt.title('State Evolution over time')
@@ -67,14 +66,16 @@ class Result():
         plt.plot(res2[:,State.EXPOSED],'r')
         plt.plot(res2[:,State.PRODROMIC_INFECTIOUS],'g')
         plt.legend(['Exposed','Prodromic'])
-        last_state=np.sum(res[-1,:,:],axis=0)
         self.draw_dates(dates)
        
         plt.subplot (3,2,6)
         plt.plot(res2[:,State.ICU],'c')
         plt.plot(range(offset,offset+len(data_ICU_beds)),data_ICU_beds,'k.')
         plt.legend(['Occupied ICU beds','Data - occupied ICU beds'])
-    
+        self.draw_dates(dates)
+
+        last_state=np.sum(res[-1,:,:],axis=0)
+
         print ('Nb Dead = ',last_state[State.DEAD])
         print ('Nb Recovered =', last_state[State.RECOVERED])
         print ('Nb ICU =', last_state[State.ICU])
